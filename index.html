@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark - JARVIS Interface</title>
-    <!-- Importar modelo 3D viewer de Google -->
+    <title>Dark_ProjectX - JARVIS Interface</title>
+    <!-- Importar modelo 3D viewer -->
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
         * {
@@ -15,47 +15,51 @@
         }
 
         body {
-            background-color: #0b0b0f;
+            background-color: #050508;
             color: #ffffff;
-            height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
         }
 
-        /* Fondo inmersivo */
         .bg-overlay {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, #1a1a2e 0%, #050508 100%);
+            background: radial-gradient(circle at center, #151522 0%, #050508 100%);
             z-index: -1;
         }
 
         /* Contenedor principal estilo Apple Liquid Glass */
         .glass-container {
-            width: 85%;
-            max-width: 900px;
-            height: 80vh;
+            width: 90%;
+            max-width: 1000px;
             background: rgba(20, 20, 30, 0.45);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 32px;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            margin: 40px 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+        }
+
+        .header-section {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            padding: 40px;
             gap: 30px;
             align-items: center;
         }
 
         .info-section h1 {
-            font-size: 2.5rem;
+            font-size: 2.3rem;
             font-weight: 700;
             margin-bottom: 15px;
             background: linear-gradient(180deg, #ffffff 0%, #a0a0c0 100%);
@@ -64,33 +68,30 @@
         }
 
         .info-section p {
-            color: #9898b0;
-            font-size: 1rem;
+            color: #a0a0b8;
+            font-size: 0.95rem;
             line-height: 1.6;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .badge {
             display: inline-block;
-            padding: 8px 16px;
+            padding: 6px 14px;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             letter-spacing: 1px;
             color: #00e5ff;
+            margin-bottom: 15px;
         }
 
-        /* Visor 3D */
         .model-box {
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.2);
+            height: 320px;
+            background: rgba(0, 0, 0, 0.25);
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             overflow: hidden;
         }
 
@@ -99,35 +100,113 @@
             height: 100%;
         }
 
-        /* Reproductor flotante de audio */
-        .audio-dock {
-            position: absolute;
-            bottom: 30px;
-            background: rgba(20, 20, 30, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        /* Sección informativa de HTML5 */
+        .html5-section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .html5-section h2 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+
+        .html5-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .html5-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .html5-card h3 {
+            font-size: 1rem;
+            color: #00e5ff;
+            margin-bottom: 6px;
+        }
+
+        .html5-card p {
+            font-size: 0.85rem;
+            color: #9898b0;
+            line-height: 1.4;
+        }
+
+        /* Créditos y Botón de Donación */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .credits-box h3, .donate-box h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .credits-box ul {
+            list-style: none;
+            color: #a0a0b8;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .credits-box li span {
+            color: #00e5ff;
+            font-weight: 600;
+        }
+
+        .donate-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            text-decoration: none;
             padding: 12px 25px;
-            border-radius: 50px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+            transition: transform 0.2s ease;
+            text-align: center;
+        }
+
+        .donate-btn:hover {
+            transform: scale(1.03);
+        }
+
+        /* Reproductor de audio */
+        .audio-container {
             display: flex;
             align-items: center;
-            gap: 15px;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         audio {
             height: 35px;
+            width: 70%;
         }
 
-        /* Adaptabilidad para celulares */
         @media (max-width: 768px) {
-            .glass-container {
+            .header-section, .footer-grid {
                 grid-template-columns: 1fr;
-                height: 90vh;
-                padding: 20px;
-                overflow-y: auto;
             }
-            .model-box {
-                height: 250px;
+            .glass-container {
+                width: 95%;
+                padding: 20px;
             }
         }
     </style>
@@ -137,26 +216,69 @@
     <div class="bg-overlay"></div>
 
     <div class="glass-container">
-        <!-- Textos y presentación -->
-        <div class="info-section">
-            <span class="badge">SYSTEM: ONLINE</span>
-            <h1>JARVIS // Dark</h1>
-            <p>Interfaz inteligente centralizada inspirada en el diseño de cristal líquido de Apple. Desarrollado mediante la integración avanzada de inteligencias artificiales para modelado tridimensional y ambientación sonora.</p>
+        
+        <!-- Cabecera y Visor 3D -->
+        <div class="header-section">
+            <div class="info-section">
+                <span class="badge">SYSTEM: ONLINE // DARK_PROJECTX</span>
+                <h1>JARVIS Interface</h1>
+                <p>Centro de operaciones inteligente desarrollado con el estilo estético de cristal líquido de Apple (*Liquid Glass*). Diseñado para ofrecer una experiencia interactiva de alto rendimiento bajo tecnología web avanzada.</p>
+                
+                <!-- Reproductor de audio -->
+                <div class="audio-container">
+                    <span style="font-size: 0.85rem; color: #ccc;">Audio AI</span>
+                    <audio controls loop>
+                        <source src="" type="audio/mp3">
+                    </audio>
+                </div>
+            </div>
+
+            <div class="model-box">
+                <model-viewer src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" auto-rotate camera-controls disable-zoom></model-viewer>
+            </div>
         </div>
 
-        <!-- Visor del modelo 3D (puedes cambiar el link del src por tu modelo de Tripo AI en formato .glb) -->
-        <div class="model-box">
-            <model-viewer src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" auto-rotate camera-controls disable-zoom></model-viewer>
+        <!-- Sección de HTML5 y Capacidades -->
+        <div class="html5-section">
+            <h2>Potencial de HTML5 en el Proyecto</h2>
+            <p style="color: #9898b0; font-size: 0.9rem;">Esta plataforma aprovecha al máximo los estándares modernos de HTML5 para garantizar accesibilidad, rendimiento y compatibilidad multiplataforma:</p>
+            
+            <div class="html5-grid">
+                <div class="html5-card">
+                    <h3>Semántica Estructural</h3>
+                    <p>Uso de etiquetas semánticas modernas que optimizan la jerarquía del documento y la lectura de motores web.</p>
+                </div>
+                <div class="html5-card">
+                    <h3>Multimedia Nativa</h3>
+                    <p>Integración fluida de etiquetas de audio y video en bucle sin requerir plugins externos pesados.</p>
+                </div>
+                <div class="html5-card">
+                    <h3>APIs y Elementos 3D</h3>
+                    <p>Soporte para componentes gráficos interactivos conectados directamente al DOM mediante WebGL.</p>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <!-- Reproductor de música (puedes poner el enlace de tu audio de Suno en el src) -->
-    <div class="audio-dock">
-        <span style="font-size: 0.85rem; color: #ccc;">Audio AI</span>
-        <audio controls loop>
-            <source src="" type="audio/mp3">
-            Tu navegador no soporta audio.
-        </audio>
+        <!-- Créditos y Donaciones -->
+        <div class="footer-grid">
+            <div class="credits-box">
+                <h3>Créditos del Equipo</h3>
+                <ul>
+                    <li>• Alejandro Coronell Castro <span>(Yo)</span></li>
+                    <li>• Jairo Andrés Pérez Ayala</li>
+                    <li>• Andrés Felipe Valdés Guerrero</li>
+                    <li>• Jhosua Peláez</li>
+                    <li>• Leonardo Ortiz</li>
+                </ul>
+            </div>
+
+            <div class="donate-box">
+                <h3>Apoya el Proyecto</h3>
+                <p style="color: #9898b0; font-size: 0.85rem; margin-bottom: 12px;">¿Te gustó el trabajo? Envía una contribución directa al equipo.</p>
+                <a href="https://wa.me/573163582894?text=Hola,%20quiero%20hacer%20una%20donación%20para%20Dark_ProjectX" target="_blank" class="donate-btn">Donar por WhatsApp (+57 3163582894)</a>
+            </div>
+        </div>
+
     </div>
 
 </body>
